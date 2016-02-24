@@ -37,7 +37,6 @@ int main(int argc, char **argv) {
 	int rightLength;
 	for(int i = 0; i < position; i++){ //find length of left portion before colon
 		leftLength = i;
-		//printf("test");
 	}
 	for(int i = position+1; i < argc; i++){ //find length of right portion after colon
 		rightLength = i - position;
@@ -47,19 +46,17 @@ int main(int argc, char **argv) {
 	int fd[2]; 
 	pipe(fd); 
 	switch (pid = fork()) { 
-		case 0: /* child */ 
+		case 0: //child 
 			dup2(fd[0], 0); 
 			close(fd[1]); //child does not need end of the pipe 
 			execvp(argv[position+1], &argv[position+1]); 
 			perror(argv[0]); 
 
-		default: /* parent */ 
+		default: //parent
 			dup2(fd[1], 1); 
 			close(fd[0]); //parent does not need end of the pipe 
-			//printf("test/n");			
 			execvp(argv[1], &argv[1]); 
 			perror(argv[0]);
-			//printf("test\n"); 
 
 		case -1: 
 			perror("fork"); 
